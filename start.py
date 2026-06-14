@@ -1,28 +1,28 @@
-import sys
-import distro
-import subprocess
+from Classes.os_check import oscheck
+from Classes.linux_class import mainlin
+from Classes.win_class import mainwin
+from subprocess import run
 
-apt = []
-pacman = []
-errorflag = False
+check = oscheck()
+linux = mainlin()
+win = mainwin()
 
-so = sys.platform # linux // darwin // win32 #
-
-if so == "linux" or "linux2":
-    distroid = distro.id()
-    print(distroid)
-    if distroid in apt:
-        print("Apt")
-    elif distroid in pacman:
-        print("Pacman")
-    else:
-        print("Other")
-
-elif so == "win32" or "win64":
-    print(so)
+def update_dlp():
     
-elif so == "darwin":
-    errorflag = True
-    print("Mac not supported")
+    if check.checkos() == "Linux":
+        run("./yt-dlp-linux -U", shell=True)
+    elif check.checkos() == "Darwin":
+        print("Error: MacOS not supported")
+    elif check.checkos() == "Windows":
+        run("./yt-dlp -U", shell=True)
 
-print(so)
+def start():
+
+    update_dlp()
+    if check.checkos() == "Linux":
+        linux.mainfunc()
+    elif check.checkos() == "Windows":
+        win.mainfunc()
+        
+if __name__ == "__main__":
+    start()
